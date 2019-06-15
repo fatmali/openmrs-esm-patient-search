@@ -1,6 +1,6 @@
 import React from "react";
 import { doSearch } from "./patient.resource";
-import { css } from "@emotion/core";
+import { Link } from "react-router-dom";
 
 export default function PatientSearch(props: PatientSearchProps) {
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -19,16 +19,12 @@ export default function PatientSearch(props: PatientSearchProps) {
           setIsSearching(false);
         });
     }
-  });
+  }, [isSearching]);
 
   function handleSubmit($event: React.FormEvent<HTMLFormElement>) {
     $event.preventDefault();
     setIsSearching(true);
     setResultsLoaded(false);
-  }
-
-  function navigateToPatientDashboard(patientUuid) {
-    props.history.push(`/patient-dashboard/${patientUuid}`);
   }
 
   return (
@@ -52,7 +48,7 @@ export default function PatientSearch(props: PatientSearchProps) {
         ></input>
         <button type="submit">{isSearching ? "Searching..." : "Search"}</button>
       </form>
-      {resultsLoaded ? (
+      {resultsLoaded && (
         patientResults.length ? (
           <table>
             <tr>
@@ -62,7 +58,8 @@ export default function PatientSearch(props: PatientSearchProps) {
               <th>Gender</th>
             </tr>
             {patientResults.map(result => [
-              <tr onClick={() => navigateToPatientDashboard(result.uuid)}>
+              <Link to={`patient-dashboard/${result.uuid}`}>
+              <tr>
                 <td>
                   {result.identifiers
                     .map(identifier => identifier.identifier)
@@ -72,13 +69,12 @@ export default function PatientSearch(props: PatientSearchProps) {
                 <td>{result.person.age}</td>
                 <td>{result.person.gender}</td>
               </tr>
+              </Link>
             ])}
           </table>
         ) : (
           <p> No results to display </p>
         )
-      ) : (
-        <></>
       )}
     </div>
   );
