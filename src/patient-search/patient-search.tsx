@@ -1,7 +1,7 @@
 import React from "react";
 import { doSearch } from "./patient.resource";
-import { Link } from "react-router-dom";
-
+// @ts-ignore
+import styles from "./patient-search.css";
 export default function PatientSearch(props: PatientSearchProps) {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [isSearching, setIsSearching] = React.useState(false);
@@ -27,55 +27,64 @@ export default function PatientSearch(props: PatientSearchProps) {
     setResultsLoaded(false);
   }
 
+  function navigateToPatientDashboard(patientUuid: string) {
+    props.history.push(`/patient-dashboard/${patientUuid}`);
+  }
+
   return (
-    <div
-      css={css`
-        width: 500px;
-        margin: 76px auto 0 auto;
-        background-color: white;
-        border-radius: 5px;
-        box-shadow: 0 10px 30px -24px #b3b3b3;
-        padding: 16px;
-      `}
-    >
-      Patient Search
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter name or identifier to search"
-          value={searchTerm}
-          onChange={$event => setSearchTerm($event.target.value)}
-        ></input>
-        <button type="submit">{isSearching ? "Searching..." : "Search"}</button>
-      </form>
-      {resultsLoaded && (
-        patientResults.length ? (
-          <table>
-            <tr>
-              <th>Identifiers</th>
-              <th>Name</th>
-              <th>Age</th>
-              <th>Gender</th>
-            </tr>
-            {patientResults.map(result => [
-              <Link to={`patient-dashboard/${result.uuid}`}>
-              <tr>
-                <td>
-                  {result.identifiers
-                    .map(identifier => identifier.identifier)
-                    .join(",")}
-                </td>
-                <td>{result.person.display}</td>
-                <td>{result.person.age}</td>
-                <td>{result.person.gender}</td>
-              </tr>
-              </Link>
-            ])}
-          </table>
-        ) : (
-          <p> No results to display </p>
-        )
-      )}
+    <div className={styles.container}>
+      <div className={styles.all_content}>
+        <form onSubmit={handleSubmit}>
+          <div className={styles.content}>
+            <input
+              className={styles.searchbox}
+              type="text"
+              placeholder="Enter name or identifier to search"
+              value={searchTerm}
+              onChange={$event => setSearchTerm($event.target.value)}
+              autoFocus
+            ></input>
+            <button className={styles.btn} type="submit">
+              {isSearching ? "Searching..." : "Search"}
+            </button>
+          </div>
+        </form>
+        {resultsLoaded && (
+          <div className={styles.search_results}>
+            {patientResults.length && (
+              <table className={styles.search_results}>
+                <tr>
+                  <th>#</th>
+                  <th>Identifiers</th>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Gender</th>
+                </tr>
+                {patientResults.map((result, i) => [
+                  <tr
+                    className={styles.table_row}
+                    onClick={() => navigateToPatientDashboard(result.uuid)}
+                  >
+                    <td>{i + 1}</td>
+                    <td>
+                      {result.identifiers
+                        .map(identifier => identifier.identifier)
+                        .join(",")}
+                    </td>
+                    <td>{result.person.display}</td>
+                    <td>{result.person.age}</td>
+                    <td>{result.person.gender}</td>
+                  </tr>
+                ])}
+              </table>
+            )}
+            <p className={styles.matches_text}>
+              Found {patientResults.length}{" "}
+              {patientResults.length === 1 ? "match" : "matches"}{" "}
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
