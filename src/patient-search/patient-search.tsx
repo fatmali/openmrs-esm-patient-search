@@ -1,7 +1,7 @@
 import React from "react";
 import { doSearch } from "./patient.resource";
-// @ts-ignore
 import styles from "./patient-search.css";
+
 export default function PatientSearch(props: PatientSearchProps) {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [isSearching, setIsSearching] = React.useState(false);
