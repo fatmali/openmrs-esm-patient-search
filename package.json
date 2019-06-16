@@ -7,11 +7,12 @@
     "lint": "eslint src --fix --ext tsx",
     "build": "webpack --mode=production",
     "typescript": "tsc",
+    "prettier": "prettier",
     "test": "jest --config jest.config.json"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint && npm test && npm run typescript"
+      "pre-commit": "pretty-quick --staged && npm run lint && npm test && npm run typescript"
     }
   },
   "repository": {
@@ -29,12 +30,12 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
-    "@emotion/babel-preset-css-prop": "^10.0.9",
     "@types/jest": "^24.0.13",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.0.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.3.0",
@@ -44,13 +45,14 @@
     "jest": "^24.8.0",
     "jest-cli": "^24.8.0",
     "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.0",
+    "style-loader": "^0.23.1",
     "typescript": "^3.5.1",
     "webpack": "^4.33.0",
     "webpack-cli": "^3.3.4",
     "webpack-dev-server": "^3.7.1"
   },
   "dependencies": {
-    "@emotion/core": "^10.0.10",
     "@testing-library/react": "^8.0.1",
     "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
